@@ -23,7 +23,7 @@ model User {
   devices   Device[]
   id        String     @id @default(uuid())
   keys      String[]   @default([])
-  name      String
+  name      String     @unique
   password  String
   sessions  Session[]
   updatedAt DateTime   @updatedAt
