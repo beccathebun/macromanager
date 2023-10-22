@@ -1,0 +1,29 @@
+---
+import { PrismaClient } from "@prisma/client";
+const { id } = Astro.params;
+if (!id) {
+  return Astro.redirect("/?error=noid&type=device");
+}
+const queryparams = Astro.url.searchParams;
+const prisma = new PrismaClient();
+const device = await prisma.device.findUnique({
+  where: {
+    id: id,
+  },
+  include: {
+    macros: true,
+  },
+});
+if (!device) {
+  return Astro.redirect("/?error=notfound&type=device");
+}
+// if (device.access === "NONE") {
+//   return Astro.redirect("/?error=Device has no access configured");
+// }
+// if (device.access === "RESTRICTED") {
+//   if (!device.keys.includes(queryparams.get("key") || "")) {
+//     return Astro.redirect("/?error=Invalid or missing key");
+//   }
+// }
+const macros = device.macros;
+---
